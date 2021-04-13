@@ -1,0 +1,40 @@
+{
+  "name": "forms-copy",
+  "version": "1.0.0",
+  "description": "google forms copy app",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "serve": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DonAlexandro/forms-copy.git"
+  },
+  "keywords": [
+    "js",
+    "react",
+    "nodejs",
+    "mongodb",
+    "graphql",
+    "google",
+    "forms"
+  ],
+  "author": "Alexandro <parashnokwtf@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DonAlexandro/forms-copy/issues"
+  },
+  "homepage": "https://github.com/DonAlexandro/forms-copy#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  },
+  "dependencies": {
+    "apollo-server-express": "^2.22.2",
+    "bcrypt": "^5.0.1",
+    "express": "^4.17.1",
+    "graphql": "^15.5.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.12.3"
+  }
+}

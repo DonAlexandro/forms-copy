@@ -1,35 +1,21 @@
 const {Schema, model} = require('mongoose')
 
+const keys = require('../keys')
+
 const formSchema = new Schema({
     title: {
         type: String,
         required: true
     },
     description: String,
+    color: {
+        type: String,
+        default: keys.DEFAULT_COLOR
+    },
     author: {
         type: Schema.Types.ObjectId,
         ref: 'User'
     },
-    questions: [
-        {
-            title: {
-                required: true,
-                type: String
-            },
-            answers: [
-                {
-                    title: {
-                        required: true,
-                        type: String
-                    }
-                }
-            ],
-            createdAt: {
-                type: Date,
-                default: Date.now
-            }
-        }
-    ],
     createdAt: {
         type: Date,
         default: Date.now

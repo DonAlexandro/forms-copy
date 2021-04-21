@@ -2,58 +2,63 @@ const {gql} = require('apollo-server-express')
 
 module.exports = gql`
     type User {
-        id: ID!,
-        username: String!,
-        email: String!,
-        password: String!,
+        id: ID!
+        username: String!
+        email: String!
+        password: String!
         token: String!
     },
 
     type Answer {
-        id: ID!,
-        title: String!,
+        id: ID!
+        body: String!
         correct: Boolean
     }
 
     type Form {
-        id: ID!,
-        title: String!,
-        description: String,
-        color: String!,
-        author: ID!,
+        id: ID!
+        title: String!
+        description: String
+        color: String!
+        author: ID!
         createdAt: String!
     },
 
     type Question {
-        id: ID!,
-        title: String!,
+        id: ID!
+        title: String!
         type: String!
-        description: String,
-        required: Boolean!,
-        form: Form!,        
-        answers: [Answer],
+        description: String
+        required: Boolean!
+        form: String!    
+        answers: [Answer]!
         createdAt: String!  
     }
 
     input SignupInput {
-        username: String!,
+        username: String!
         email: String!
-        password: String!,
+        password: String!
         confirm: String!
     }
 
     input AnswerInput {
-        title: String!
+        body: String!
+        correct: Boolean
     }
 
     input QuestionInput {
-        title: String!,
-        answers: [AnswerInput]
+        title: String!
+        description: String
+        required: Boolean
+        type: String
+        answers: [AnswerInput]!
+        form: String!
     }
 
     input FormInput {
-        title: String!,
-        description: String,
+        title: String!
+        description: String
         color: String
     }
 
@@ -62,10 +67,12 @@ module.exports = gql`
     }
 
     type Mutation {
-        signup(signupInput: SignupInput): User!,
-        login(email: String!, password: String!): User!,
-        createForm(formInput: FormInput): Form!,
-        editForm(id: ID!, formInput: FormInput): Form!,
+        signup(signupInput: SignupInput): User!
+        login(email: String!, password: String!): User!
+        createForm(formInput: FormInput): Form!
+        editForm(id: ID!, formInput: FormInput): Form!
         deleteForm(id: ID!): String!
+        createQuestion(questionInput: QuestionInput): Question!
+        editQuestion(id: ID!, questionInput: QuestionInput): Question!
     }
 `

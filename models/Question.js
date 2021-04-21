@@ -7,7 +7,6 @@ const questionSchema = new Schema({
     },
     type: {
         type: String,
-        required: true,
         default: 'quiz'
     },
     description: String,
@@ -21,7 +20,7 @@ const questionSchema = new Schema({
     },
     answers: [
         {
-            title: {
+            body: {
                 type: String,
                 required: true
             },

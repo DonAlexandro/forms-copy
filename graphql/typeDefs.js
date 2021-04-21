@@ -64,6 +64,8 @@ module.exports = gql`
     type Mutation {
         signup(signupInput: SignupInput): User!,
         login(email: String!, password: String!): User!,
-        createForm(formInput: FormInput): Form!
+        createForm(formInput: FormInput): Form!,
+        editForm(id: ID!, formInput: FormInput): Form!,
+        deleteForm(id: ID!): String!
     }
 `

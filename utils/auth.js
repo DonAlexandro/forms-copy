@@ -17,7 +17,6 @@ module.exports = request => {
 
         return user
     } catch (e) {
-        console.log(e)
         throw new AuthenticationError(invalidTokenMessage)
     }
 }

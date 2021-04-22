@@ -74,5 +74,6 @@ module.exports = gql`
         deleteForm(id: ID!): String!
         createQuestion(questionInput: QuestionInput): Question!
         editQuestion(id: ID!, questionInput: QuestionInput): Question!
+        deleteQuestion(id: ID!): String
     }
 `

@@ -3,6 +3,7 @@ const { UserInputError } = require('apollo-server-errors')
 const auth = require('../../utils/auth')
 const { questionValidator } = require('../../utils/validators/question')
 const Question = require('../../models/Question')
+const { deleteOne } = require('../../models/Question')
 
 module.exports = {
     Mutation: {
@@ -58,6 +59,16 @@ module.exports = {
                 }
             } catch (e) {
                 throw new Error('An error occured during question editing. Try again later', {e})
+            }
+        },
+
+        async deleteQuestion(_, {id}, {req}) {
+            auth(req)
+
+            try {
+                await Question.deleteOne({_id: id})
+            } catch (e) {
+                throw new Error('An error occured during question deleting. Try again later', {e})
             }
         }
     }

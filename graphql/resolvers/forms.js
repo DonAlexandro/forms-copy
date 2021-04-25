@@ -1,6 +1,7 @@
 const { UserInputError } = require("apollo-server-errors")
 
 const Form = require("../../models/Form")
+const Question = require("../../models/Question")
 const auth = require("../../utils/auth")
 const { formValidator } = require("../../utils/validators/form")
 
@@ -74,6 +75,7 @@ module.exports = {
                     id: form._id
                 }
             } catch (e) {
+                console.log(e)
                 throw new Error('An error occured during form editing. Try again later', {e})
             }
         },
@@ -85,6 +87,10 @@ module.exports = {
                 await Form.deleteOne({
                     _id: id,
                     author: user.id
+                })
+
+                await Question.deleteMany({
+                    form: id
                 })
 
                 return 'Form was successfully deleted'

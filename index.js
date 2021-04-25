@@ -1,6 +1,7 @@
 const express = require('express')
 const {ApolloServer} = require('apollo-server-express')
 const mongoose = require('mongoose')
+const cors = require('cors')
 
 const keys = require('./keys')
 const resolvers = require('./graphql/resolvers')
@@ -16,7 +17,7 @@ async function startApolloServer() {
         const server = new ApolloServer({
             resolvers,
             typeDefs,
-            context: ({req}) => ({req})
+            context: ({req, res}) => ({req, res})
         })
         
         await server.start()
@@ -25,7 +26,9 @@ async function startApolloServer() {
 
         app.use(express.urlencoded({extended: true}))
         app.use(express.json({extended: true}))
-
+        
+        app.use(cors())
+        
         server.applyMiddleware({app})
 
         await new Promise(resolve => app.listen({port: keys.PORT}, resolve))

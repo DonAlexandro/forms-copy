@@ -1,13 +1,23 @@
 import React from 'react'
-import {Typography} from 'antd'
+import {BrowserRouter as Router} from 'react-router-dom'
+import {Layout} from 'antd'
 
-const {Title} = Typography
+import { AuthProvider } from './context/auth'
+import { routes } from './utils/router/routes'
+
+const {Content} = Layout
 
 function App() {
 	return (
-		<div>
-			<Title>Hello World</Title>
-		</div>	
+		<AuthProvider>
+			<Router>
+				<Layout>
+					<Content>
+						{routes}
+					</Content>
+				</Layout>
+			</Router>
+		</AuthProvider>
 	)
 }
 

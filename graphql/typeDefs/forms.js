@@ -1,28 +1,29 @@
-const { gql } = require('apollo-server-core')
+const {gql} = require('apollo-server-core')
 
 module.exports = gql`
-    type Form {
-        id: ID!
-        title: String!
-        description: String
-        color: String!
-        author: ID!
-        createdAt: String!
-    }
+	type Form {
+		id: ID!
+		title: String!
+		description: String
+		color: String!
+		author: ID!
+		createdAt: String!
+	}
 
-    input FormInput {
-        title: String!
-        description: String
-        color: String
-    }
+	input FormInput {
+		title: String!
+		description: String
+		color: String
+	}
 
-    extend type Query {
-        getForms: [Form]
-    }
+	extend type Query {
+		getForms: [Form]
+		getForm(id: ID!): Form
+	}
 
-    extend type Mutation {
-        createForm(formInput: FormInput): Form!
-        editForm(id: ID!, formInput: FormInput): Form!
-        deleteForm(id: ID!): String!
-    }
+	extend type Mutation {
+		createForm(formInput: FormInput): Form!
+		editForm(id: ID!, formInput: FormInput): Form!
+		deleteForm(id: ID!): String!
+	}
 `

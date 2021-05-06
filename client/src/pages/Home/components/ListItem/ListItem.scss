@@ -1,0 +1,10 @@
+@import '../../../../styles/utils/mixins';
+
+.form-label {
+	@include center-content;
+	@include square(40px);
+
+	border-radius: 50%;
+	color: #fff;
+	font-size: 18px;
+}

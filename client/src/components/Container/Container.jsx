@@ -1,5 +1,5 @@
 import './container.scss'
 
-const Container = ({children}) => <div className="container">{children}</div>
+const Container = ({children, size = 'large'}) => <div className={`container ${size}`}>{children}</div>
 
 export default Container

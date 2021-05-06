@@ -2,7 +2,7 @@ import {List, Typography} from 'antd'
 import {useQuery} from '@apollo/client'
 
 import {FORMS_QUERY} from '../../../../graphql/queries/form'
-import {ListItem} from '../listItem'
+import ListItem from '../ListItem'
 
 import './FormsList.scss'
 
@@ -18,7 +18,7 @@ const FormsList = () => {
 			size="large"
 			dataSource={forms}
 			locale={{emptyText: `You haven't created any form yet`}}
-			renderItem={(form) => <ListItem key={form.id} form={form} loading={loading} />}
+			renderItem={form => <ListItem key={form.id} form={form} loading={loading} />}
 		/>
 	)
 }

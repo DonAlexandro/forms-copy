@@ -1,4 +1,5 @@
-import {message, Card, Form, Input} from 'antd'
+import {message, Card, Form, Input, Button} from 'antd'
+import {PlusOutlined} from '@ant-design/icons'
 import {useParams, useHistory} from 'react-router-dom'
 import {useQuery} from '@apollo/client'
 
@@ -30,17 +31,20 @@ const FormEditing = () => {
 				<>
 					<Header form={form} />
 					<div className="form-wrapper" style={{backgroundColor: form.color}}>
-						<Container>
+						<Container size="medium">
 							<Card>
-								<Form>
+								<Form initialValues={form}>
 									<Form.Item name="title">
-										<Input size="large" placeholder="Title" defaultValue={form.title} />
+										<Input size="large" placeholder="Title" />
 									</Form.Item>
 									<Form.Item name="description">
-										<Input size="small" placeholder="Description" defaultValue={form.description} />
+										<Input size="small" placeholder="Description" />
 									</Form.Item>
 								</Form>
 							</Card>
+							<Button block icon={<PlusOutlined />} className="add-question">
+								Add Question
+							</Button>
 						</Container>
 					</div>
 				</>

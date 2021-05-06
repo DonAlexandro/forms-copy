@@ -11,7 +11,7 @@ module.exports = {
 			const user = auth(req)
 
 			try {
-				const forms = await Form.find({author: user.id})
+				const forms = await Form.find({author: user.id}).sort({date: 'desc'})
 
 				return forms
 			} catch (e) {

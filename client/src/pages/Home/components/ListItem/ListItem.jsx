@@ -1,23 +1,25 @@
 import {useMutation} from '@apollo/client'
 import {Modal, List, Menu, Typography, Skeleton, Dropdown, Button} from 'antd'
-import {DeleteOutlined, MoreOutlined} from '@ant-design/icons'
+import {DeleteOutlined, MoreOutlined, FileTextOutlined} from '@ant-design/icons'
 import {Link} from 'react-router-dom'
 import dayjs from 'dayjs'
 
-import {DELETE_FORM_MUTATION} from '../../../graphql/mutations/form'
-import {FORMS_QUERY} from '../../../graphql/queries/form'
+import {DELETE_FORM_MUTATION} from '../../../../graphql/mutations/form'
+import {FORMS_QUERY} from '../../../../graphql/queries/form'
+
+import './ListItem.scss'
 
 const {confirm} = Modal
 const {Title} = Typography
 
-export const ListItem = ({form, loading}) => {
+const ListItem = ({form, loading}) => {
 	const [deleteForm] = useMutation(DELETE_FORM_MUTATION, {
 		update(proxy) {
 			let data = proxy.readQuery({
 				query: FORMS_QUERY
 			})
 
-			data = {getForms: data.getForms.filter((f) => f.id !== form.id)}
+			data = {getForms: data.getForms.filter(f => f.id !== form.id)}
 			proxy.writeQuery({query: FORMS_QUERY, data})
 		},
 		variables: {id: form.id}
@@ -52,15 +54,21 @@ export const ListItem = ({form, loading}) => {
 		>
 			<Skeleton loading={loading} active>
 				<List.Item.Meta
+					avatar={
+						<div className="form-label" style={{backgroundColor: form.color}}>
+							<FileTextOutlined />
+						</div>
+					}
 					title={
 						<Link to={`/form/${form.id}`}>
 							<Title level={5}>{form.title}</Title>
 						</Link>
 					}
-					description={dayjs(form.createdAt).format('DD MMMM YYYY')}
+					description={form.description || <em>No description</em>}
 				/>
-				{form.description}
 			</Skeleton>
 		</List.Item>
 	)
 }
+
+export default ListItem

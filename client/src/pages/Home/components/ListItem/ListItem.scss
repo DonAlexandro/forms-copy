@@ -1,7 +1,7 @@
 @import '../../../../styles/utils/mixins';
 
 .form-label {
-	@include center-content;
+	@include flex(center, center);
 	@include square(40px);
 
 	border-radius: 50%;

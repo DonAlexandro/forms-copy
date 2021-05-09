@@ -1,3 +1,19 @@
+## 09.05.2021
+
+1. Now user can create new question
+2. Now user can fully edit his forms
+
+---
+
+## 06.05.2021
+
+1. Added color label to list of forms
+2. Added "add question" button
+3. Added ability to change form color
+4. Improved Container component
+
+---
+
 ## 04.05.2021
 
 1. When user click "Add new form" button, it will be created instantly and user will be redirect to it

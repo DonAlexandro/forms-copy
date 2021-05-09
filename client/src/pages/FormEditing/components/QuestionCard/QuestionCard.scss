@@ -1,0 +1,19 @@
+@import '../../../../styles/utils/mixins';
+
+.question-card {
+	margin-top: 1rem !important;
+
+	.question-header {
+		@include flex(flex-start, space-between);
+	}
+
+	.actions {
+		@include flex(center, flex-end);
+
+		width: 100%;
+	}
+
+	.detailed-input {
+		margin-top: 1rem;
+	}
+}

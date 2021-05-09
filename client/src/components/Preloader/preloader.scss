@@ -2,5 +2,5 @@
 
 .loader-wrapper {
 	@include square(100%);
-	@include center-content;
+	@include flex(center, center);
 }

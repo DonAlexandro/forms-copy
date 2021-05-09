@@ -1,75 +1,90 @@
-const { UserInputError } = require('apollo-server-errors')
+const {UserInputError} = require('apollo-server-errors')
 
 const auth = require('../../utils/auth')
-const { questionValidator } = require('../../utils/validators/question')
+const {questionValidator} = require('../../utils/validators/question')
 const Question = require('../../models/Question')
-const { deleteOne } = require('../../models/Question')
 
 module.exports = {
-    Mutation: {
-        async createQuestion(_, {questionInput}, {req}) {
-            auth(req)
+	Query: {
+		async getQuestions(_, {formId}, {req}) {
+			auth(req)
 
-            const {errors, valid} = questionValidator(questionInput)
+			try {
+				const questions = await Question.find({
+					form: formId
+				})
 
-            if (!valid) {
-                throw new UserInputError('Question creating erros', {errors})
-            }
+				return questions
+			} catch (e) {
+				throw new Error('An error occured during questions fetching. Try again later', {e})
+			}
+		}
+	},
 
-            try {
-                const question = new Question(questionInput)
+	Mutation: {
+		async createQuestion(_, {questionInput}, {req}) {
+			auth(req)
 
-                const res = await question.save()
+			const {errors, valid} = questionValidator(questionInput)
 
-                return {
-                    ...res._doc,
-                    id: res._id
-                }
-            } catch (e) {
-                throw new Error('An error occured during question creating. Try again later', {e})
-            }
-        },
+			if (!valid) {
+				throw new UserInputError('Question creating erros', {errors})
+			}
 
-        async editQuestion(_, {id, questionInput}, {req}) {
-            auth(req)
+			try {
+				const question = new Question(questionInput)
 
-            const {errors, valid} = questionValidator(questionInput)
+				const res = await question.save()
 
-            if (!valid) {
-                throw new UserInputError('Question editing errors', {errors})
-            }
+				return {
+					...res._doc,
+					id: res._id
+				}
+			} catch (e) {
+				throw new Error('An error occured during question creating. Try again later', {e})
+			}
+		},
 
-            try {
-                const {form} = questionInput
+		async editQuestion(_, {id, questionInput}, {req}) {
+			auth(req)
 
-                const question = await Question.findOne({_id: id, form})
+			const {errors, valid} = questionValidator(questionInput)
 
-                const toChange = {
-                    ...question._doc,
-                    ...questionInput
-                }
+			if (!valid) {
+				throw new UserInputError('Question editing errors', {errors})
+			}
 
-                Object.assign(question, toChange)
+			try {
+				const {form} = questionInput
 
-                await question.save()
+				const question = await Question.findOne({_id: id, form})
 
-                return {
-                    ...question._doc,
-                    id: question._id
-                }
-            } catch (e) {
-                throw new Error('An error occured during question editing. Try again later', {e})
-            }
-        },
+				const toChange = {
+					...question._doc,
+					...questionInput
+				}
 
-        async deleteQuestion(_, {id}, {req}) {
-            auth(req)
+				Object.assign(question, toChange)
 
-            try {
-                await Question.deleteOne({_id: id})
-            } catch (e) {
-                throw new Error('An error occured during question deleting. Try again later', {e})
-            }
-        }
-    }
+				await question.save()
+
+				return {
+					...question._doc,
+					id: question._id
+				}
+			} catch (e) {
+				throw new Error('An error occured during question editing. Try again later', {e})
+			}
+		},
+
+		async deleteQuestion(_, {id}, {req}) {
+			auth(req)
+
+			try {
+				await Question.deleteOne({_id: id})
+			} catch (e) {
+				throw new Error('An error occured during question deleting. Try again later', {e})
+			}
+		}
+	}
 }

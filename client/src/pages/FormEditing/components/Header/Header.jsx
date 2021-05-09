@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react'
-import {PageHeader} from 'antd'
+import {PageHeader, message} from 'antd'
 import {useHistory} from 'react-router-dom'
 import {useMutation} from '@apollo/client'
 
@@ -12,7 +12,10 @@ const Header = ({form}) => {
 	const [color, setColor] = useState(form.color)
 
 	const [editForm] = useMutation(EDIT_FORM_MUTATION, {
-		variables: {...form, color}
+		variables: {...form, color},
+		onError(err) {
+			message.error(Object.values(err.graphQLErrors[0].extensions.errors)[0])
+		}
 	})
 
 	useEffect(() => {

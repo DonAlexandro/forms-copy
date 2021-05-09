@@ -1,0 +1,11 @@
+@import '../../../../styles/utils/mixins';
+
+.form-header {
+	@include flex(flex-start, space-between);
+
+	width: 100%;
+
+	h2 {
+		width: 95%;
+	}
+}

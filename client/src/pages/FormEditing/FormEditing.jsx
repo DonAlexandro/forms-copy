@@ -1,13 +1,16 @@
-import {message, Card, Form, Input, Button} from 'antd'
-import {PlusOutlined} from '@ant-design/icons'
+import {message} from 'antd'
 import {useParams, useHistory} from 'react-router-dom'
 import {useQuery} from '@apollo/client'
 
 import Header from './components/Header'
 import MainLayout from '../../layouts/Main'
-import {FORM_QUERY} from '../../graphql/queries/form'
 import Preloader from '../../components/Preloader'
 import Container from '../../components/Container'
+import QuestionCard from './components/QuestionCard'
+import AddQuestion from './components/AddQuestion'
+import FormCard from './components/FormCard/FormCard'
+import {FORM_QUERY} from '../../graphql/queries/form'
+import {GET_QUESTIONS_QUERY} from '../../graphql/queries/question'
 
 import './FormEditing.scss'
 
@@ -15,7 +18,7 @@ const FormEditing = () => {
 	const {id} = useParams()
 	const history = useHistory()
 
-	const {loading, data: {getForm: form} = {}} = useQuery(FORM_QUERY, {
+	const {loading: formLoading, data: {getForm: form} = {}} = useQuery(FORM_QUERY, {
 		variables: {id},
 		onError(err) {
 			history.push('/')
@@ -23,28 +26,24 @@ const FormEditing = () => {
 		}
 	})
 
+	const {loading: questionsLoading, data: {getQuestions: questions} = {}} = useQuery(GET_QUESTIONS_QUERY, {
+		variables: {formId: id}
+	})
+
 	return (
 		<MainLayout>
-			{loading ? (
+			{formLoading || questionsLoading ? (
 				<Preloader />
 			) : (
 				<>
 					<Header form={form} />
 					<div className="form-wrapper" style={{backgroundColor: form.color}}>
 						<Container size="medium">
-							<Card>
-								<Form initialValues={form}>
-									<Form.Item name="title">
-										<Input size="large" placeholder="Title" />
-									</Form.Item>
-									<Form.Item name="description">
-										<Input size="small" placeholder="Description" />
-									</Form.Item>
-								</Form>
-							</Card>
-							<Button block icon={<PlusOutlined />} className="add-question">
-								Add Question
-							</Button>
+							<FormCard form={form} />
+							{questions.map(question => (
+								<QuestionCard key={question.id} question={question} />
+							))}
+							<AddQuestion formId={id} />
 						</Container>
 					</div>
 				</>

@@ -2,7 +2,6 @@ import {useMutation} from '@apollo/client'
 import {Modal, List, Menu, Typography, Skeleton, Dropdown, Button} from 'antd'
 import {DeleteOutlined, MoreOutlined, FileTextOutlined} from '@ant-design/icons'
 import {Link} from 'react-router-dom'
-import dayjs from 'dayjs'
 
 import {DELETE_FORM_MUTATION} from '../../../../graphql/mutations/form'
 import {FORMS_QUERY} from '../../../../graphql/queries/form'

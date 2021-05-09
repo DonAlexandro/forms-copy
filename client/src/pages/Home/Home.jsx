@@ -1,34 +1,32 @@
-import { useContext } from 'react'
+import {useContext} from 'react'
 import {Button, PageHeader} from 'antd'
-import {Link} from 'react-router-dom'
 
 import {AuthContext} from '../../context/auth'
-import { FormsList } from './components/formsList'
-
-import './home.scss'
+import FormsList from './components/FormsList'
+import MainLayout from '../../layouts/Main'
+import Container from '../../components/Container'
+import CreateFormButton from './components/CreateFormButton'
 
 const Home = () => {
-    const {logout, user} = useContext(AuthContext)
+	const {logout, user} = useContext(AuthContext)
 
-    return (
-        <div className="main-wrapper">
-            <div className="page">
-                <PageHeader
-                    title={`Hello, ${user.username}`}
-                    className="page-header"
-                    extra={[
-                        <Button type="primary" key="new">
-                            <Link to="/form/new">New Form</Link>
-                        </Button>,
-                        <Button onClick={logout} key="logout">Logout</Button>
-                    ]}
-                />
-                <div className="container">
-                    <FormsList />
-                </div>
-            </div>
-        </div>
-    )
+	return (
+		<MainLayout>
+			<PageHeader
+				title={`Hello, ${user.username}`}
+				className="page-header"
+				extra={[
+					<CreateFormButton key="new" />,
+					<Button onClick={logout} key="logout">
+						Logout
+					</Button>
+				]}
+			/>
+			<Container>
+				<FormsList />
+			</Container>
+		</MainLayout>
+	)
 }
 
 export default Home

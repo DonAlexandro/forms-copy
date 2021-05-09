@@ -1,0 +1,6 @@
+@import '../../styles/utils/mixins';
+
+.loader-wrapper {
+	@include square(100%);
+	@include flex(center, center);
+}

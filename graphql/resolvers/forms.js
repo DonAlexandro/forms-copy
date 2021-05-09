@@ -1,102 +1,121 @@
-const { UserInputError } = require("apollo-server-errors")
+const {UserInputError} = require('apollo-server-errors')
 
-const Form = require("../../models/Form")
-const Question = require("../../models/Question")
-const auth = require("../../utils/auth")
-const { formValidator } = require("../../utils/validators/form")
+const Form = require('../../models/Form')
+const Question = require('../../models/Question')
+const auth = require('../../utils/auth')
+const {formValidator} = require('../../utils/validators/form')
 
 module.exports = {
-    Query: {
-        async getForms(_, args, {req}) {
-            const user = auth(req)
+	Query: {
+		async getForms(_, args, {req}) {
+			const user = auth(req)
 
-            try {
-                const forms = await Form.find({author: user.id})
+			try {
+				const forms = await Form.find({author: user.id}).sort({date: 'desc'})
 
-                return forms
-            } catch (e) {
-                throw new Error('An error occured during forms fetching. Try again later', {e})
-            }
-        }
-    },
-    Mutation: {
-        async createForm(_, {formInput}, {req}) {
-            const user = auth(req)
+				return forms
+			} catch (e) {
+				throw new Error('An error occured during forms fetching. Try again later', {e})
+			}
+		},
 
-            const {errors, valid} = formValidator(formInput)
+		async getForm(_, {id}, {req}) {
+			const user = auth(req)
 
-            if (!valid) {
-                throw new UserInputError('Form creating errors', {errors})
-            }
+			try {
+				const form = await Form.findOne({
+					_id: id,
+					author: user.id
+				})
 
-            try {
-                const form = new Form({
-                    ...formInput,
-                    author: user.id
-                })
+				if (!form) {
+					throw new Error('Form not found')
+				}
 
-                const res = await form.save()
+				return form
+			} catch (e) {
+				throw new Error('An error occured during form fetching. Try again later', {e})
+			}
+		}
+	},
+	Mutation: {
+		async createForm(_, {formInput}, {req}) {
+			const user = auth(req)
 
-                return {
-                    ...res._doc,
-                    id: res._id
-                }
-            } catch (e) {
-                throw new Error('An error occured during form creating. Try again later', {e})
-            }
-        },
+			const {errors, valid} = formValidator(formInput)
 
-        async editForm(_, {id, formInput}, {req}) {
-            const user = auth(req)
+			if (!valid) {
+				throw new UserInputError('Form creating errors', {errors})
+			}
 
-            const {errors, valid} = formValidator(formInput)
+			try {
+				const form = new Form({
+					...formInput,
+					author: user.id
+				})
 
-            if (!valid) {
-                throw new UserInputError('Form editing errors', {errors})
-            }
+				const res = await form.save()
 
-            try {
-                const form = await Form.findOne({
-                    _id: id,
-                    author: user.id
-                })
+				return {
+					...res._doc,
+					id: res._id
+				}
+			} catch (e) {
+				throw new Error('An error occured during form creating. Try again later', {e})
+			}
+		},
 
-                const toChange = {
-                    ...form._doc,
-                    ...formInput
-                }
+		async editForm(_, {id, formInput}, {req}) {
+			const user = auth(req)
 
-                Object.assign(form, toChange)
+			const {errors, valid} = formValidator(formInput)
 
-                await form.save()
+			if (!valid) {
+				throw new UserInputError('Form editing errors', {errors})
+			}
 
-                return {
-                    ...form._doc,
-                    id: form._id
-                }
-            } catch (e) {
-                console.log(e)
-                throw new Error('An error occured during form editing. Try again later', {e})
-            }
-        },
+			try {
+				const form = await Form.findOne({
+					_id: id,
+					author: user.id
+				})
 
-        async deleteForm(_, {id}, {req}) {
-            const user = auth(req)
+				const toChange = {
+					...form._doc,
+					...formInput
+				}
 
-            try {
-                await Form.deleteOne({
-                    _id: id,
-                    author: user.id
-                })
+				Object.assign(form, toChange)
 
-                await Question.deleteMany({
-                    form: id
-                })
+				await form.save()
 
-                return 'Form was successfully deleted'
-            } catch (e) {
-                throw new Error('An error occured during form deleting. Try again later', {e})
-            }
-        }
-    }
+				return {
+					...form._doc,
+					id: form._id
+				}
+			} catch (e) {
+				console.log(e)
+				throw new Error('An error occured during form editing. Try again later', {e})
+			}
+		},
+
+		async deleteForm(_, {id}, {req}) {
+			const user = auth(req)
+
+			try {
+				await Form.deleteOne({
+					_id: id,
+					author: user.id
+				})
+
+				await Question.deleteMany({
+					form: id
+				})
+
+				return 'Form was successfully deleted'
+			} catch (e) {
+				throw new Error('An error occured during form deleting. Try again later', {e})
+			}
+		}
+	}
 }

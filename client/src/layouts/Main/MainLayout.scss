@@ -1,0 +1,20 @@
+@import '../../styles/utils/mixins';
+
+.main-wrapper {
+	min-height: 100vh;
+	height: 100vh;
+	max-height: auto;
+	min-width: 100vw;
+	padding: 50px;
+
+	.page {
+		height: 100%;
+		min-height: 100%;
+		min-width: 100%;
+		background-color: #fff;
+
+		.page-header {
+			border-bottom: 1px solid #f0f0f0;
+		}
+	}
+}

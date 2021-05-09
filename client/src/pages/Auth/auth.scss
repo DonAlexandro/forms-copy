@@ -1,12 +1,12 @@
 @import '../../styles/utils/mixins';
 
 .auth-wrapper {
-    @include center-content;
+	@include flex(center, center);
 
-    width: 100vw;
-    height: 100vh;
+	width: 100vw;
+	height: 100vh;
 
-    .auth-card {
-        min-width: 30%;
-    }
+	.auth-card {
+		min-width: 30%;
+	}
 }

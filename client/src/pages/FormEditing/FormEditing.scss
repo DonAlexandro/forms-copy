@@ -2,5 +2,6 @@
 
 .form-wrapper {
 	padding-top: 2rem;
-	min-height: calc(100% - 73px);
+	height: calc(100% - 73px);
+	overflow-y: auto;
 }

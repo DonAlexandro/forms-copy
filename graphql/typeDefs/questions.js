@@ -37,8 +37,8 @@ module.exports = gql`
 	}
 
 	extend type Mutation {
-		createQuestion(questionInput: QuestionInput): Question!
-		editQuestion(id: ID!, questionInput: QuestionInput): Question!
+		createQuestion(questionInput: QuestionInput!): Question!
+		editQuestion(id: ID!, questionInput: QuestionInput!): Question!
 		deleteQuestion(id: ID!): String
 	}
 `

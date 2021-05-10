@@ -7,6 +7,27 @@
 		@include flex(flex-start, space-between);
 	}
 
+	.question-type {
+		display: flex;
+		width: 100%;
+
+		label {
+			flex-grow: 1;
+		}
+	}
+
+	.answer {
+		.ant-list-item-meta-avatar {
+			margin-right: 0;
+
+			.ant-radio-wrapper-disabled {
+				* {
+					cursor: default;
+				}
+			}
+		}
+	}
+
 	.actions {
 		@include flex(center, flex-end);
 

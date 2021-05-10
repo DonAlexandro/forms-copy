@@ -13,6 +13,7 @@ export const GET_QUESTIONS_QUERY = gql`
 				correct
 			}
 			required
+			form
 		}
 	}
 `

@@ -1,10 +1,11 @@
 import {useEffect, useState} from 'react'
-import {Form, Card, Input, Typography, Button, message} from 'antd'
+import {Form, Card, Input, Typography, Button} from 'antd'
 import {EditOutlined} from '@ant-design/icons'
 import onClickOutside from 'react-onclickoutside'
 import {useMutation} from '@apollo/client'
 
 import {useDebounce} from '../../../../hooks/useDebounce'
+import {useError} from '../../../../hooks/useError'
 import {EDIT_FORM_MUTATION} from '../../../../graphql/mutations/form'
 
 import './FormCard.scss'
@@ -12,6 +13,8 @@ import './FormCard.scss'
 const {Title, Text} = Typography
 
 function FormCard({form}) {
+	const setError = useError()
+
 	const [editMode, setEditMode] = useState(false)
 	const [editFormValue, setEditFormValue] = useState({title: form.title, description: form.description})
 
@@ -22,7 +25,7 @@ function FormCard({form}) {
 	const [editForm] = useMutation(EDIT_FORM_MUTATION, {
 		variables: {id: form.id, ...editFormValue},
 		onError(err) {
-			message.error(Object.values(err.graphQLErrors[0].extensions.errors)[0])
+			setError(err)
 		}
 	})
 

@@ -5,7 +5,7 @@ import storage from '../storage'
  * @returns {string} - token of the current user
  */
 const getToken = () => {
-    return storage.getItem('token')
+	return storage.getItem('token')
 }
 
 /**
@@ -13,14 +13,14 @@ const getToken = () => {
  * @param {string} token - token for user
  */
 const setToken = token => {
-    storage.setItem('token', token)
+	storage.setItem('token', token)
 }
 
 /**
  * Remove token of the current user
  */
 const removeToken = () => {
-    storage.removeItem('token')
+	storage.removeItem('token')
 }
 
 export default {getToken, setToken, removeToken}

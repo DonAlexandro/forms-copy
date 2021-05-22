@@ -1,5 +1,5 @@
-import {useContext, ReactNode} from 'react'
-import { Redirect, Route } from 'react-router-dom'
+import {useContext} from 'react'
+import {Redirect, Route} from 'react-router-dom'
 
 import {AuthContext} from '../../context/auth'
 
@@ -8,14 +8,7 @@ import {AuthContext} from '../../context/auth'
  * @returns {Route} - rendered component or redirect to home page if user exists
  */
 export const AuthRoute = ({component: Component, ...rest}) => {
-    const {user} = useContext(AuthContext)
+	const {user} = useContext(AuthContext)
 
-    return (
-        <Route 
-            {...rest}
-            render={props => !user ? <Component {...props}/> : <Redirect to="/"/>}
-        />
-    )
+	return <Route {...rest} render={props => (!user ? <Component {...props} /> : <Redirect to="/" />)} />
 }
-
-

@@ -1,5 +1,4 @@
-import {message} from 'antd'
-import {useParams, useHistory} from 'react-router-dom'
+import {useParams} from 'react-router-dom'
 import {useQuery} from '@apollo/client'
 
 import Header from './components/Header'
@@ -9,6 +8,7 @@ import Container from '../../components/Container'
 import QuestionCard from './components/QuestionCard'
 import AddQuestion from './components/AddQuestion'
 import FormCard from './components/FormCard/FormCard'
+import {useError} from '../../hooks/useError'
 import {FORM_QUERY} from '../../graphql/queries/form'
 import {GET_QUESTIONS_QUERY} from '../../graphql/queries/question'
 
@@ -16,13 +16,12 @@ import './FormEditing.scss'
 
 const FormEditing = () => {
 	const {id} = useParams()
-	const history = useHistory()
+	const setError = useError()
 
 	const {loading: formLoading, data: {getForm: form} = {}} = useQuery(FORM_QUERY, {
 		variables: {id},
 		onError(err) {
-			history.push('/')
-			message.error(Object.values(err.graphQLErrors[0].extensions.errors)[0])
+			setError(err)
 		}
 	})
 

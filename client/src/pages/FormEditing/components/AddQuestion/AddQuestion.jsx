@@ -1,13 +1,16 @@
-import {Button, message} from 'antd'
+import {Button} from 'antd'
 import {PlusOutlined} from '@ant-design/icons'
 import {useMutation} from '@apollo/client'
 
+import {useError} from '../../../../hooks/useError'
 import {CREATE_QUESTION_MUTATION} from '../../../../graphql/mutations/question'
 import {GET_QUESTIONS_QUERY} from '../../../../graphql/queries/question'
 
 import './AddQuestion.scss'
 
 const AddQuestion = ({formId}) => {
+	const setError = useError()
+
 	const [addQuestion, {loading: addQuestionLoading}] = useMutation(CREATE_QUESTION_MUTATION, {
 		variables: {
 			title: 'Question',
@@ -23,7 +26,7 @@ const AddQuestion = ({formId}) => {
 			proxy.writeQuery({query: GET_QUESTIONS_QUERY, variables: {formId}, data})
 		},
 		onError(err) {
-			message.error(Object.values(err.graphQLErrors[0].extensions.errors)[0])
+			setError(err)
 		}
 	})
 

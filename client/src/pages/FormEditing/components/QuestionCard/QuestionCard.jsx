@@ -1,38 +1,19 @@
 import {useEffect, useRef, useState} from 'react'
-import {
-	Row,
-	Col,
-	Card,
-	Form,
-	Input,
-	Select,
-	Typography,
-	Button,
-	List,
-	Divider,
-	Space,
-	Switch,
-	Tooltip,
-	message,
-	Radio
-} from 'antd'
+import {Row, Col, Card, Form, Input, Typography, Button, List, Divider, Space, Switch, Tooltip, Radio} from 'antd'
 import {PlusCircleOutlined, DeleteOutlined, EditOutlined} from '@ant-design/icons'
 import {useMutation} from '@apollo/client'
-import {useHistory} from 'react-router-dom'
 
 import {useClickOutside} from '../../../../hooks/useClickOutside'
 import {useDebounce} from '../../../../hooks/useDebounce'
+import {useError} from '../../../../hooks/useError'
 import {DELETE_QUESTION_MUTATION, EDIT_QUESTION_MUTATION} from '../../../../graphql/mutations/question'
 import {GET_QUESTIONS_QUERY} from '../../../../graphql/queries/question'
 
 import './QuestionCard.scss'
 
 const {Text, Title} = Typography
-const {Option} = Select
 
 const QuestionCard = ({question}) => {
-	const history = useHistory()
-
 	// Outside clicking functional
 	const ref = useRef(null)
 	useClickOutside(ref, () => setEditMode(false))
@@ -50,8 +31,6 @@ const QuestionCard = ({question}) => {
 		required: question.required
 	})
 
-	const [answers, setAnswers] = useState(question.answers)
-
 	const handleEditQuestion = (name, value) => {
 		setEditQuestionValue(prev => ({
 			...prev,
@@ -61,26 +40,39 @@ const QuestionCard = ({question}) => {
 
 	const debouncedQuestionValue = useDebounce(editQuestionValue, 500)
 
-	const [editQuestion, {loading: editLoading}] = useMutation(EDIT_QUESTION_MUTATION, {
+	const [answers, setAnswers] = useState(question.answers)
+
+	const changeAnswer = answer => {
+		setAnswers(prev =>
+			prev.map(a => {
+				if (a.id === answer.id) {
+					return answer
+				}
+
+				return a
+			})
+		)
+	}
+
+	const debouncedAnswers = useDebounce(answers, 500)
+
+	const setError = useError()
+
+	const [editQuestion] = useMutation(EDIT_QUESTION_MUTATION, {
 		variables: {
 			id: question.id,
 			form: question.form,
 			...editQuestionValue,
-			answers: answers.map(a => ({body: a.body, correct: a.borrect}))
+			answers: answers.map(a => ({body: a.body, correct: a.correct}))
 		},
 		onError(err) {
-			if (err.graphQLErrors[0].extensions.code === 'UNAUTHENTICATED') {
-				message.error(err.graphQLErrors[0].message)
-				history.push('/login')
-			} else {
-				message.error(Object.values(err.graphQLErrors[0].extensions.errors)[0])
-			}
+			setError(err)
 		}
 	})
 
 	useEffect(() => {
 		editQuestion()
-	}, [debouncedQuestionValue, editQuestion, answers])
+	}, [debouncedQuestionValue, editQuestion, answers, debouncedAnswers])
 
 	// Delete question mutation
 	const [deleteQuestion, {loading}] = useMutation(DELETE_QUESTION_MUTATION, {
@@ -146,7 +138,9 @@ const QuestionCard = ({question}) => {
 							>
 								{question.answers.map(answer => (
 									<List.Item key={answer.id}>
-										<Text editable>{answer.body}</Text>
+										<Text editable={{onChange: body => changeAnswer({...answer, body})}}>
+											{answer.body}
+										</Text>
 									</List.Item>
 								))}
 							</List>
